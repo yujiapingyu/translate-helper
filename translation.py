@@ -1,4 +1,5 @@
 import requests
+import pyperclip
 from HandleJs import Py4Js
 
 
@@ -21,17 +22,23 @@ def translate(content, tk):
         tsel=0&kc=2""", params=param)
 
     result_list = result.json()
+    copy_text = ''
     with open('translation.txt', 'w', encoding='utf-8') as f:
         for item in result_list[0]:
             if item[0] is None or item[1] is None:
                 pass
             else:
                 f.write(item[1])
+                copy_text += item[1]
                 print(item[1])
                 f.write('\n')
+                copy_text += '\n'
+
                 f.write(item[0])
+                copy_text += item[0]
                 print(item[0])
                 f.write('\n\n')
+                copy_text += '\n\n'
                 print('\n')
         f.write('所有的内容：\n')
         f.write(content)
@@ -42,6 +49,8 @@ def translate(content, tk):
             else:
                 f.write(item[0])
                 print(item[0])
+
+        pyperclip.copy(copy_text)
 
 
 def main():
@@ -59,7 +68,6 @@ def main():
 
     tk = js.getTk(paper)
     translate(paper, tk)
-    print('已经保存到translation.txt文件中.\n')
 
 
 if __name__ == "__main__":
